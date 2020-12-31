@@ -44,7 +44,6 @@ if __name__ == '__main__':
     for id in id_list:
         data={'id':id}
         detail_json= requests.post(url=post_url,headers=headers,data=data).json()
-        print(detail_json)
         all_data_list.append(detail_json)
     # 持久化存储
     fp=open('./allData.json','w',encoding='utf-8')
