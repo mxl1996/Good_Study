@@ -36,7 +36,6 @@ import shutil
 
 
 fake = Faker(locale='zh_cn')  # 添加本地化
-fake.seed(10000)  # 设置随机数种子，每次生成的数据一致
 
 baseDir = '../data/'  # 基础目录
 if not os.path.isdir(baseDir):
@@ -83,7 +82,7 @@ else:
     os.mkdir(datafileBaseDir)
 
 # 分区日期
-partitionDateBase = '2018010'
+partitionDateBase = '2021010'
 dateDay = 1
 endDay = 7
 
@@ -92,21 +91,25 @@ count = 100
 
 while dateDay <= endDay:
     dateDay = dateDay + 1
+    # 循环生成每天数据
     partitionDate = '%s%s%s' % ('date_day=', partitionDateBase, dateDay)  # 分区时间
+    #  print("=======",partitionDate)
+    # 循环生成文件存放目录
     partitionDateDir = '%s%s%s' % (datafileBaseDir, '/', partitionDate)
-
+    # print("========",partitionDateDir)
+    # 如果不存在目录，创建目录
     if not os.path.isdir(partitionDateDir):
         os.mkdir(partitionDateDir)
     else:
         shutil.rmtree(partitionDateDir)
         os.mkdir(partitionDateDir)
-
+     # 生成文件存放的命名规则
     dirAndFileName = '%s%s%s%s' % (partitionDateDir, '/', fileName, '.txt')
     print('%s\n' % dirAndFileName)
 
     n = 0
-    currentCount = count * (dateDay - 1)  # 每个文件其实开始时间
-    while n <= count:  # 执行100次
+    currentCount = count * (dateDay - 1)  # 每个文件起始开始时间
+    while n <= count:  # 执行100次,控制数据条数
         n += 1  # 每执行1次之后加1
 
         # 数据加工逻辑
@@ -127,7 +130,11 @@ while dateDay <= endDay:
 
         with open(dirAndFileName, 'a') as file:  # 追加模式
             file.writelines(fileContent)
-
+            file.close()
+"""
+ 2、执行hdfs命令上传数据至hdfs
+ 3、执行hdfs命令自动建立分区
+"""
 
 
 
